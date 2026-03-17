@@ -55,3 +55,4 @@ async def root():
     Returns:
         list[Task]: Текущий список задач.
     """
+    return tasks
