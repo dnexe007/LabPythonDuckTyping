@@ -14,7 +14,29 @@ class TasksReader:
         for i in sources:
             if not isinstance(i, TaskSource):
                 raise TypeError("TasksReader only accepts TaskSource instances.")
-        self.sources = sources
+        self._sources = sources
+
+    def add_source(self, source: TaskSource) -> None:
+        """
+        Добавить новый источник задач в список.
+        Args:
+            source: Источник задач для добавления
+        Raises:
+            TypeError: Если переданный объект не является TaskSource
+        """
+        if not isinstance(source, TaskSource):
+            raise TypeError("TasksReader only accepts TaskSource instances.")
+        self._sources.append(source)
+
+    def remove_source_by_index(self, index: int) -> None:
+        """
+        Удалить источник из списка по его индексу.
+        Args:
+            index: Индекс удаляемого источника
+        Raises:
+            IndexError: Если индекс выходит за пределы списка
+        """
+        self._sources.pop(index)
 
     def read_tasks(self) -> list[Task]:
         """
@@ -23,6 +45,6 @@ class TasksReader:
             list[Task]: Объединенный список задач из всех источников
         """
         tasks: list[Task] = []
-        for source in self.sources:
+        for source in self._sources:
             tasks.extend(source.get_tasks())
         return tasks

@@ -28,3 +28,34 @@ def test_tasks_reader_validation() -> None:
             TypeError, match="TasksReader only accepts TaskSource instances"
     ):
         TasksReader(["not a source"])  # type: ignore
+
+
+def test_tasks_reader_add_source() -> None:
+    reader = TasksReader([])
+    source = MagicMock(spec=TaskSource)
+
+    reader.add_source(source)  # type: ignore
+
+    assert len(reader._sources) == 1
+    assert reader._sources[0] is source
+
+
+def test_tasks_reader_add_source_validation() -> None:
+    reader = TasksReader([])
+    with raises(TypeError, match="TasksReader only accepts TaskSource instances"):
+        reader.add_source("not a source")  # type: ignore
+
+
+def test_tasks_reader_remove_source() -> None:
+    source = MagicMock(spec=TaskSource)
+    reader = TasksReader([source])  # type: ignore
+
+    reader.remove_source_by_index(0)
+
+    assert len(reader._sources) == 0
+
+
+def test_tasks_reader_remove_source_index_error() -> None:
+    reader = TasksReader([])
+    with raises(IndexError):
+        reader.remove_source_by_index(0)
