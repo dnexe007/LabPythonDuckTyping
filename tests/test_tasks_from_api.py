@@ -4,7 +4,7 @@ from src.task import Task
 from requests.exceptions import HTTPError
 
 
-def test_tasks_from_api_success(requests_mock):
+def test_tasks_from_api_success(requests_mock) -> None:
     url = "https://fake-api.com"
     mock_data = [
         {
@@ -14,19 +14,19 @@ def test_tasks_from_api_success(requests_mock):
     ]
     requests_mock.get(url, json=mock_data, status_code=200)
 
-    client = TasksFromAPI(url)
-    tasks = client.get_tasks()
+    source = TasksFromAPI(url)
+    tasks = source.get_tasks()
 
     assert len(tasks) == 1
     assert tasks[0].id == "api-1"
     assert isinstance(tasks[0], Task)
 
 
-def test_tasks_from_api_server_error(requests_mock):
+def test_tasks_from_api_server_error(requests_mock) -> None:
     url = "https://fake-api.com"
     requests_mock.get(url, status_code=404)
 
-    client = TasksFromAPI(url)
+    source = TasksFromAPI(url)
 
     with raises(HTTPError):
-        client.get_tasks()
+        source.get_tasks()

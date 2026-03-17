@@ -5,7 +5,7 @@ from src.task_sources.task_source_protocol import TaskSource
 from pytest import raises
 
 
-def test_tasks_reader_combines_tasks():
+def test_tasks_reader_combines_tasks() -> None:
     source1 = MagicMock(spec=TaskSource)
     source2 = MagicMock(spec=TaskSource)
 
@@ -15,7 +15,7 @@ def test_tasks_reader_combines_tasks():
     source1.get_tasks.return_value = [task1]
     source2.get_tasks.return_value = [task2]
 
-    reader = TasksReader([source1, source2])
+    reader = TasksReader([source1, source2])  # type: ignore
     all_tasks = reader.read_tasks()
 
     assert len(all_tasks) == 2
@@ -23,8 +23,8 @@ def test_tasks_reader_combines_tasks():
     assert all_tasks[1].id == "2"
 
 
-def test_tasks_reader_validation():
+def test_tasks_reader_validation() -> None:
     with raises(
-        TypeError, match="TasksReader only accepts TaskSource instances"
+            TypeError, match="TasksReader only accepts TaskSource instances"
     ):
-        TasksReader(["not a source"])
+        TasksReader(["not a source"])  # type: ignore

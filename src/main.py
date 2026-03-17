@@ -6,9 +6,10 @@ from task_sources.tasks_from_file import TasksFromFile
 from task_sources.tasks_from_api import TasksFromAPI
 from task_sources.task_source_protocol import TaskSource
 from src.tasks_reader import TasksReader
-from api import app
+from src.api import app
 
-def run_api():
+
+def run_api() -> None:
     """Функция для запуска API в отдельном процессе"""
     run(app, host="localhost", port=8000, log_level="warning")
 

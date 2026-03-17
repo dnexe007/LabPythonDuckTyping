@@ -3,7 +3,7 @@ from src.task_sources.tasks_generator import TasksGenerator
 from src.task import Task
 
 
-def test_tasks_generator():
+def test_tasks_generator() -> None:
     gen1 = TasksGenerator(5)
     tasks = gen1.get_tasks()
     assert len(tasks) == 5
@@ -18,4 +18,4 @@ def test_tasks_generator():
         TasksGenerator(-1)
 
     with raises(TypeError):
-        TasksGenerator(5.5)
+        TasksGenerator(5.5)  # type: ignore
