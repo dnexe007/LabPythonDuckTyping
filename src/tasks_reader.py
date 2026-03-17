@@ -3,7 +3,7 @@ from src.task_sources.task_source_protocol import TaskSource
 
 
 class TasksReader:
-    def __init__(self, sources: list[TaskSource]):
+    def __init__(self, sources: list[TaskSource] | None = None):
         """
         Инициализирует читатель задач.
         Args:
@@ -11,10 +11,13 @@ class TasksReader:
         Raises:
             TypeError: Если любой из элементов не является TaskSource
         """
+        if sources is None:
+            self._sources = []
+            return
         for i in sources:
             if not isinstance(i, TaskSource):
                 raise TypeError("TasksReader only accepts TaskSource instances.")
-        self._sources = sources
+        self._sources = sources.copy()
 
     def add_source(self, source: TaskSource) -> None:
         """

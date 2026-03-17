@@ -1,1 +1,43 @@
-# LabPythonDuckTyping
+Программа создает источники задач, добавляет их в Reader, Reader читает из них задачи благодаря протоколу и общему методу get_tasks, прописанному в этом протоколе. При добавлении источников в Reader происходит проверка на соответствие протоколу, при несоответствии вылетает TypeError.
+
+## Источники
+
+1. Источник задач из файла - читает содержимое json файла, преобразует полученные данные в список Task и возвращает его. В корне проекта лежит готовый json файл, который будет читаться в main.
+2. Генератор задач - генерирует задачи, случайным образом собирая payload, выбирая элементы из списков titles, deadlines, priorities.
+3. Источник задач из API - обращается с get запросом к API, преобразует полученные данные в список Task и возвращает его.
+## API
+Для работы с источником задач через API написан простой код на FastAPI, который при обращении по методу get возвращает json с списком задач. Сервер запускается прямо в main через multiprocess, и завершается после вывода задач.
+
+## Структура проекта
+
+```text
+LabPythonDuckTyping/
+├── .venv/
+├── src/
+│   ├── task_sources/
+│   │   ├── __init__.py
+│   │   ├── task_source_protocol.py
+│   │   ├── tasks_from_api.py
+│   │   ├── tasks_from_file.py
+│   │   └── tasks_generator.py
+│   ├── __init__.py
+│   ├── api.py
+│   ├── main.py
+│   ├── task.py
+│   └── tasks_reader.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_tasks_from_api.py
+│   ├── test_tasks_from_file.py
+│   ├── test_tasks_generator.py
+│   └── test_tasks_reader.py
+├── .gitignore
+├── .pre-commit-config.yaml
+├── data.json
+├── README.md
+└── requirements.txt
+
+```
+
+## Запуск программы
+Файл `src/main.py`. Как сказано в пункте API, сервер запускается прямо в main, там же завершает свою работу. запускать его отдельно не нужно.
