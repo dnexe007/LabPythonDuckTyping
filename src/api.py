@@ -47,6 +47,11 @@ tasks: list[Task] = [
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/", response_model=list[Task])
 async def root():
-    return tasks
+    """
+    Эндпоинт для получения всех задач из API.
+
+    Returns:
+        list[Task]: Текущий список задач.
+    """
