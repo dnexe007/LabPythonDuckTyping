@@ -1,25 +1,43 @@
+from multiprocessing import Process
+from time import sleep
+from uvicorn import run
 from task_sources.tasks_generator import TasksGenerator
 from task_sources.tasks_from_file import TasksFromFile
 from task_sources.tasks_from_api import TasksFromAPI
 from task_sources.task_source_protocol import TaskSource
 from src.tasks_reader import TasksReader
+from api import app
+
+def run_api():
+    """Функция для запуска API в отдельном процессе"""
+    run(app, host="localhost", port=8000, log_level="warning")
 
 
 def main() -> None:
     """
-        создает TaskReader, добавляет в
-        него источники и выводит все задачи.
+    создает TaskReader, добавляет в
+    него источники и выводит все задачи.
     """
-    sources: list[TaskSource] = [
-        TasksGenerator(5),
-        TasksFromFile("../data.json"),
-        TasksFromAPI("http://localhost:8000"),
-    ]
+    api_process = Process(target=run_api)
+    api_process.start()
 
-    reader = TasksReader(sources)
+    sleep(2)
 
-    for task in reader.read_tasks():
-        print(task)
+    try:
+        sources: list[TaskSource] = [
+            TasksGenerator(5),
+            TasksFromFile("../data.json"),
+            TasksFromAPI("http://localhost:8000"),
+        ]
+
+        reader = TasksReader(sources)
+
+        for task in reader.read_tasks():
+            print(task)
+
+    finally:
+        api_process.terminate()
+        api_process.join()
 
 
 if __name__ == "__main__":

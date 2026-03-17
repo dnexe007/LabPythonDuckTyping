@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from task import Task
-from uvicorn import run
 
 tasks: list[Task] = [
     Task(
@@ -51,7 +50,3 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return tasks
-
-
-if __name__ == "__main__":
-    run(app, host="localhost", port=8000)
