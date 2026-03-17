@@ -1,0 +1,28 @@
+[
+  {
+    "id": "file-001",
+    "payload": {
+      "title": "Clean up the code",
+      "deadline": "tomorrow",
+      "priority": "medium",
+      "comment": "Don't forget about PEP8"
+    }
+  },
+  {
+    "id": "file-002",
+    "payload": {
+      "title": "Refactor legacy module",
+      "deadline": "in week",
+      "priority": "high"
+    }
+  },
+  {
+    "id": "file-003",
+    "payload": {
+      "title": "Go for a walk",
+      "deadline": "today",
+      "priority": "skip",
+      "location": "Park"
+    }
+  }
+]
