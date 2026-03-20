@@ -1,10 +1,11 @@
 from multiprocessing import Process
 from time import sleep
 from uvicorn import run
-from task_sources.tasks_generator import TasksGenerator
-from task_sources.tasks_from_file import TasksFromFile
-from task_sources.tasks_from_api import TasksFromAPI
-from task_sources.task_source_protocol import TaskSource
+from os import path
+from src.task_sources.tasks_generator import TasksGenerator
+from src.task_sources.tasks_from_file import TasksFromFile
+from src.task_sources.tasks_from_api import TasksFromAPI
+from src.task_sources.task_source_protocol import TaskSource
 from src.tasks_reader import TasksReader
 from src.api import app
 
@@ -27,7 +28,7 @@ def main() -> None:
     try:
         sources: list[TaskSource] = [
             TasksGenerator(5),
-            TasksFromFile("../data.json"),
+            TasksFromFile(path.join(path.dirname(__file__), "../data.json")),
             TasksFromAPI("http://localhost:8000"),
         ]
 

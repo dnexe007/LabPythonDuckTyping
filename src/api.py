@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from task import Task
+from src.task import Task
 
 tasks: list[Task] = [
     Task(
