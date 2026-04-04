@@ -23,7 +23,7 @@ def main() -> None:
     api_process = Process(target=run_api)
     api_process.start()
 
-    sleep(2)
+    sleep(1)
 
     try:
         sources: list[TaskSource] = [
