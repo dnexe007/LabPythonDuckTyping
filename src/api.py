@@ -1,58 +1,64 @@
 from fastapi import FastAPI
-from src.task import Task
+from typing import List
+from datetime import datetime
 
-tasks: list[Task] = [
+from src.task.model import Task
+from src.task.enums import PriorityEnum, StatusEnum
+
+tasks: List[Task] = [
     Task(
-        id="api-001",
-        payload={
-            "title": "Fix bug in production",
-            "deadline": "yesterday",
-            "priority": "maximum",
-        },
+        id=1,
+        description="Fix bug in production - critical issue affecting users",
+        priority=PriorityEnum.maximum,  # 4
+        status=StatusEnum.pending,       # 0
+        created_at=datetime(2026, 4, 2, 10, 30, 0)
     ),
     Task(
-        id="api-002",
-        payload={
-            "title": "Buy pizza for the team",
-            "deadline": "today",
-            "priority": "high",
-        },
+        id=2,
+        description="Buy pizza for the team",
+        priority=PriorityEnum.high,       # 3
+        status=StatusEnum.pending,        # 0
+        created_at=datetime(2026, 4, 3, 9, 0, 0)
     ),
     Task(
-        id="api-003",
-        payload={
-            "title": "Talk with DeepSeek about AI future",
-            "deadline": "in week",
-            "priority": "low",
-        },
+        id=3,
+        description="Talk with DeepSeek about AI future",
+        priority=PriorityEnum.low,        # 1
+        status=StatusEnum.in_progress,    # 1
+        created_at=datetime(2026, 4, 1, 15, 20, 0)
     ),
     Task(
-        id="api-004",
-        payload={
-            "title": "Finalize laboratory work №1",
-            "deadline": "tomorrow",
-            "priority": "medium",
-        },
+        id=4,
+        description="Finalize laboratory work №2",
+        priority=PriorityEnum.medium,     # 2
+        status=StatusEnum.pending,        # 0
+        created_at=datetime(2026, 4, 3, 8, 0, 0)
     ),
     Task(
-        id="api-005",
-        payload={
-            "title": "Just sleep finally",
-            "deadline": "in month",
-            "priority": "skip",
-        },
+        id=5,
+        description="Just sleep finally",
+        priority=PriorityEnum.minimum,    # 0
+        status=StatusEnum.completed,      # 2
+        created_at=datetime(2026, 3, 30, 23, 0, 0)
+    ),
+    Task(
+        id=6,
+        description="Write comprehensive tests",
+        priority=PriorityEnum.high,       # 3
+        status=StatusEnum.pending,        # 0
+        created_at=datetime(2026, 4, 3, 11, 0, 0)
     ),
 ]
 
 app = FastAPI()
 
 
-@app.get("/", response_model=list[Task])
-async def root():
+@app.get("/", response_model=List[dict])
+async def root() -> List[dict]:
     """
     Эндпоинт для получения всех задач из API.
 
     Returns:
-        list[Task]: Текущий список задач.
+        list[dict]: Список задач в виде словарей.
     """
-    return tasks
+    return [task.to_dict() for task in tasks]

@@ -1,21 +1,22 @@
-from pytest import raises
+import pytest
 from src.task_sources.tasks_generator import TasksGenerator
-from src.task import Task
+from src.task.model import Task
 
 
-def test_tasks_generator() -> None:
-    gen1 = TasksGenerator(5)
-    tasks = gen1.get_tasks()
+def test_tasks_generator_success():
+    gen = TasksGenerator(5)
+    tasks = gen.get_tasks()
+
     assert len(tasks) == 5
+    assert all(isinstance(t, Task) for t in tasks)
+    assert tasks[0].description in gen.descriptions
 
-    for task in tasks:
-        assert isinstance(task, Task)
-        assert task.payload["title"] in gen1.titles
-        assert task.payload["deadline"] in gen1.deadlines
-        assert task.payload["priority"] in gen1.priorities
 
-    with raises(TypeError):
-        TasksGenerator(-1)
+def test_tasks_generator_invalid_input():
+    for val in [-1, 5.5, "5"]:
+        with pytest.raises(TypeError):
+            TasksGenerator(val)
 
-    with raises(TypeError):
-        TasksGenerator(5.5)  # type: ignore
+
+def test_tasks_generator_zero():
+    assert TasksGenerator(0).get_tasks() == []

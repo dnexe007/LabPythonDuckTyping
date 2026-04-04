@@ -1,4 +1,4 @@
-from src.task import Task
+from src.task.model import Task
 from src.task_sources.task_source_protocol import TaskSource
 
 

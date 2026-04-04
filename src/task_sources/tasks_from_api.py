@@ -1,6 +1,6 @@
 from requests import get
 
-from src.task import Task
+from src.task.model import Task
 
 
 class TasksFromAPI:
@@ -25,4 +25,4 @@ class TasksFromAPI:
         response = get(self.url)
         response.raise_for_status()
         data = response.json()
-        return [Task(**task) for task in data]
+        return [Task.from_dict(task) for task in data]

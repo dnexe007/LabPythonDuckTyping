@@ -1,4 +1,4 @@
-from src.task import Task
+from src.task.model import Task
 from json import load
 
 
@@ -24,4 +24,4 @@ class TasksFromFile:
         """
         with open(self.json_file_path, "r", encoding="utf-8") as f:
             data: list[dict] = load(f)
-        return [Task(**task) for task in data]
+        return [Task.from_dict(task) for task in data]

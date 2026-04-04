@@ -1,28 +1,23 @@
 [
   {
-    "id": "file-001",
-    "payload": {
-      "title": "Clean up the code",
-      "deadline": "tomorrow",
-      "priority": "medium",
-      "comment": "Don't forget about PEP8"
-    }
+    "id": 101,
+    "description": "Clean up the code. Don't forget about PEP8",
+    "priority": 2,
+    "status": 0,
+    "created_at": "2024-01-15T10:30:00"
   },
   {
-    "id": "file-002",
-    "payload": {
-      "title": "Refactor legacy module",
-      "deadline": "in week",
-      "priority": "high"
-    }
+    "id": 102,
+    "description": "Refactor legacy module",
+    "priority": 3,
+    "status": 1,
+    "created_at": "2024-01-14T08:00:00"
   },
   {
-    "id": "file-003",
-    "payload": {
-      "title": "Go for a walk",
-      "deadline": "today",
-      "priority": "skip",
-      "location": "Park"
-    }
+    "id": 103,
+    "description": "Go for a walk",
+    "priority": 1,
+    "status": 2,
+    "created_at": "2024-01-10T20:15:00"
   }
 ]

@@ -1,48 +1,47 @@
-from pytest import raises
+import pytest
+from json import dumps, JSONDecodeError
+from datetime import datetime
 from src.task_sources.tasks_from_file import TasksFromFile
-from json import JSONDecodeError, dumps
-from src.task import Task
+from src.task.enums import PriorityEnum, StatusEnum
 
 
-def test_file_not_found_raises_error(tmp_path) -> None:
-    file_path = tmp_path / "not_found.json"
-    reader = TasksFromFile(str(file_path))
-    with raises(FileNotFoundError):
-        reader.get_tasks()
+@pytest.fixture
+def create_task_file(tmp_path):
+    def _create(name, content):
+        file = tmp_path / name
+        file.write_text(content if isinstance(content, str) else dumps(content))
+        return str(file)
+
+    return _create
 
 
-def test_invalid_json_raises_error(tmp_path) -> None:
-    bad_json = tmp_path / "bad.json"
-    bad_json.write_text("not a json", encoding="utf-8")
+def test_file_errors(tmp_path, create_task_file):
+    with pytest.raises(FileNotFoundError):
+        TasksFromFile(str(tmp_path / "none.json")).get_tasks()
 
-    reader = TasksFromFile(str(bad_json))
-    with raises(JSONDecodeError):
-        reader.get_tasks()
+    bad_json = create_task_file("bad.json", "not a json")
+    with pytest.raises(JSONDecodeError):
+        TasksFromFile(bad_json).get_tasks()
 
 
-def test_tasks_from_file_success(tmp_path) -> None:
+def test_get_tasks_success(create_task_file):
+    dt = datetime(2026, 4, 1, 10, 0)
     data = [
-        {
-            "id": "file-001",
-            "payload": {
-                "title": "Clean up",
-                "deadline": "tomorrow",
-                "priority": "medium",
-            },
-        },
-        {
-            "id": "file-002",
-            "payload": {"title": "Walk", "deadline": "today", "priority": "skip"},
-        },
+        {"id": 1, "description": "T1", "priority": PriorityEnum.medium, "status": StatusEnum.pending,
+         "created_at": dt.isoformat()},
+        {"id": 2, "description": "T2", "priority": PriorityEnum.low, "status": StatusEnum.completed,
+         "created_at": dt.isoformat()}
     ]
 
-    task_file = tmp_path / "tasks.json"
-    task_file.write_text(dumps(data), encoding="utf-8")
-
-    reader = TasksFromFile(str(task_file))
+    reader = TasksFromFile(create_task_file("tasks.json", data))
     tasks = reader.get_tasks()
 
     assert len(tasks) == 2
-    assert isinstance(tasks[0], Task)
-    assert tasks[0].id == "file-001"
-    assert tasks[1].payload["title"] == "Walk"
+    assert tasks[0].id == 1
+    assert tasks[0].priority == PriorityEnum.medium
+    assert tasks[0].created_at == dt
+
+
+def test_get_tasks_empty(create_task_file):
+    reader = TasksFromFile(create_task_file("empty.json", []))
+    assert reader.get_tasks() == []
