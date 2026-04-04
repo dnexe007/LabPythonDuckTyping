@@ -4,7 +4,9 @@ from enum import Enum
 
 
 class IdValidator:
-    """Валидатор идентификатора: проверяет, что ID является целым неотрицательным числом."""
+    """
+    Валидатор идентификатора: проверяет, что ID является целым неотрицательным числом.
+    """
     def __init__(self) -> None:
         self._name: Optional[str] = None
 
@@ -25,7 +27,11 @@ class IdValidator:
 
 
 class EnumValidator:
-    """Валидатор Enum: обеспечивает хранение значения как элемента указанного перечисления."""
+    """
+    Валидатор Enum: проверяет соответствие данных указанному enum,
+    в случае несоответствия пробует преобразовать в enum,
+    так как это может быть int, подходящий под enum
+    """
     def __init__(self, enum_class: type) -> None:
         self._name: Optional[str] = None
         self._enum_class: type = enum_class
@@ -45,7 +51,9 @@ class EnumValidator:
 
 
 class DescriptionValidator:
-    """Валидатор описания: проверяет тип строки и длину (от 1 до 200 символов)."""
+    """
+    Валидатор описания: проверяет тип строки и длину (от 1 до 200 символов).
+    """
     def __init__(self) -> None:
         self._name: Optional[str] = None
 
@@ -66,7 +74,9 @@ class DescriptionValidator:
 
 
 class CreatedAtValidator:
-    """Валидатор даты создания: разрешает установку значения только один раз."""
+    """
+    Валидатор даты создания: разрешает установку значения только один раз.
+    """
     def __init__(self) -> None:
         self._name: Optional[str] = None
 
@@ -87,7 +97,9 @@ class CreatedAtValidator:
 
 
 class IsNewDescriptor:
-    """Дескриптор для динамической проверки новизны задачи (создана менее 24 часов назад)."""
+    """
+    Дескриптор для проверки, является ли задача новой (создана менее 24 часов назад).
+    """
     def __get__(self, instance: Any, owner: Optional[Type] = None) -> Union[bool, "IsNewDescriptor"]:
         if instance is None:
             return self
