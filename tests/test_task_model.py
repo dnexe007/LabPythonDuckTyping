@@ -37,13 +37,15 @@ def test_task_properties():
 
 
 def test_task_validation_errors():
-    invalid_cases = [
-        ({"id": -1}, ValueError),
-        ({"description": ""}, ValueError),
-        ({"priority": 99}, ValueError),
+    params = {"id": 1, "description": "Valid", "priority": 1, "status": 0}
+
+    invalid_data = [
+        {"id": -1},
+        {"description": ""},
+        {"priority": 99},
+        {"status": 50},
     ]
-    for kwargs, error in invalid_cases:
-        params = {"id": 1, "description": "Valid", "priority": 1, "status": 0}
-        params.update(kwargs)
-        with pytest.raises(error):
-            Task(**params)
+
+    for data in invalid_data:
+        with pytest.raises(ValueError):
+            Task(**{**params, **data})
